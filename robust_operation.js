@@ -317,7 +317,9 @@ export class RobustOperation {
         const elapsed = monotonicNowMs() - startMono;
         const budgetLeft = overallDeadlineMs ? Math.max(0, overallDeadlineMs - elapsed) : Infinity;
         if (overallDeadlineMs && budgetLeft <= 0) {
-          throw lastError instanceof Error ? lastError : new TimeoutError('Overall deadline exceeded');
+          // Always throw a timeout error to make it clear the deadline was the cause.
+          // The last actual error is still available via the `onError` hook.
+          throw new TimeoutError('Overall deadline exceeded');
         }
 
         attemptsPerformed = attempt + 1;
