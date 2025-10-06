@@ -94,7 +94,11 @@ export function createDecorrelatedJitter(base, max, random = Math.random) {
   let sleep = Math.max(0, base);
   return () => {
     const lo = Math.max(0, base);
-    const hi = Math.max(lo, sleep * 3);
+    let hi = Math.max(lo, sleep * 3);
+    // If base and sleep are 0, hi will be 0. Widen the range to max to unstick the generator.
+    if (hi <= lo) {
+      hi = max;
+    }
     const u = Math.max(0, Math.min(1, Number(random()) || 0));
     const next = lo + u * (hi - lo);
     sleep = Math.min(max, next);
