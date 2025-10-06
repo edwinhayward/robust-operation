@@ -612,7 +612,7 @@ function parseRetryAfterValue(value, nowMs) {
   const t = Date.parse(v);
   if (Number.isNaN(t)) return null;
   const delta = t - nowMs;
-  return delta >= 0 ? delta : null;
+  return delta >= 0 ? delta : 0;
 }
 
 /**
